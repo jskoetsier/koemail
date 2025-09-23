@@ -6,15 +6,9 @@ const { authenticateToken } = require('../middleware/auth');
 
 const router = express.Router();
 
-// Custom email validation that allows IP addresses and regular domains
-const emailWithIPSchema = Joi.alternatives().try(
-  Joi.string().email(), // Standard email validation
-  Joi.string().pattern(/^[^\s@]+@\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/) // Email with IP address
-).required();
-
 // Validation schemas
 const loginSchema = Joi.object({
-  email: emailWithIPSchema,
+  email: Joi.string().email().required(),
   password: Joi.string().min(6).required(),
 });
 

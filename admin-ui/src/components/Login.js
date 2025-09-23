@@ -82,7 +82,7 @@ const Login = () => {
 
           <div className="text-center">
             <p className="text-sm text-gray-600">
-              Default: postmaster@192.168.1.201 / postmaster123
+              Default: postmaster@koetsier.it / postmaster123
             </p>
           </div>
         </form>

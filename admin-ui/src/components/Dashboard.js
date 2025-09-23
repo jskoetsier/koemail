@@ -45,7 +45,7 @@ const Dashboard = () => {
                 <ul className="mt-4 space-y-2">
                   <li>• Create users in the Users section</li>
                   <li>• Configure domains and aliases</li>
-                  <li>• Access webmail at <a href="http://192.168.1.201:8080" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-500">http://192.168.1.201:8080</a></li>
+                  <li>• Access webmail at <a href="http://koetsier.it:8080" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-500">http://koetsier.it:8080</a></li>
                   <li>• Check server settings and monitoring</li>
                 </ul>
               </div>
