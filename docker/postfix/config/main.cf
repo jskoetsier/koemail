@@ -78,9 +78,9 @@ smtpd_recipient_restrictions =
 # Data restrictions
 smtpd_data_restrictions = reject_unauth_pipelining
 
-# Milter settings for spam filtering (ClamAV temporarily disabled)
-smtpd_milters = inet:rspamd:11332
-non_smtpd_milters = inet:rspamd:11332
+# Milter settings for spam filtering (testing with IP address)
+smtpd_milters = inet:172.18.0.7:11332
+non_smtpd_milters = inet:172.18.0.7:11332
 milter_protocol = 6
 milter_mail_macros = i {mail_addr} {client_addr} {client_name} {auth_authen}
 milter_default_action = accept
