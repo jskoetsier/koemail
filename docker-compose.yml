@@ -1,0 +1,172 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgresql:
+    image: postgres:15-alpine
+    container_name: koemail-postgresql
+    environment:
+      POSTGRES_DB: mailserver
+      POSTGRES_USER: mailuser
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-changeme123}
+    volumes:
+      - postgresql_data:/var/lib/postgresql/data
+      - ./docker/postgresql/init:/docker-entrypoint-initdb.d
+    networks:
+      - mailnet
+    restart: unless-stopped
+
+  # Redis for caching and sessions
+  redis:
+    image: redis:7-alpine
+    container_name: koemail-redis
+    command: redis-server --appendonly yes
+    volumes:
+      - redis_data:/data
+    networks:
+      - mailnet
+    restart: unless-stopped
+
+  # Postfix SMTP Server
+  postfix:
+    build: ./docker/postfix
+    container_name: koemail-postfix
+    hostname: mail.${DOMAIN:-example.com}
+    environment:
+      - DOMAIN=${DOMAIN:-example.com}
+      - POSTGRES_HOST=postgresql
+      - POSTGRES_DB=mailserver
+      - POSTGRES_USER=mailuser
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-changeme123}
+    volumes:
+      - mail_data:/var/mail
+      - ./docker/postfix/config:/etc/postfix/conf.d
+      - ./certs:/etc/ssl/certs/mail
+    ports:
+      - "25:25"
+      - "587:587"
+      - "465:465"
+    networks:
+      - mailnet
+    depends_on:
+      - postgresql
+      - rspamd
+    restart: unless-stopped
+
+  # Dovecot IMAP/POP3 Server
+  dovecot:
+    build: ./docker/dovecot
+    container_name: koemail-dovecot
+    environment:
+      - DOMAIN=${DOMAIN:-example.com}
+      - POSTGRES_HOST=postgresql
+      - POSTGRES_DB=mailserver
+      - POSTGRES_USER=mailuser
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-changeme123}
+    volumes:
+      - mail_data:/var/mail
+      - ./docker/dovecot/config:/etc/dovecot/conf.d
+      - ./certs:/etc/ssl/certs/mail
+    ports:
+      - "110:110"
+      - "995:995"
+      - "143:143"
+      - "993:993"
+    networks:
+      - mailnet
+    depends_on:
+      - postgresql
+    restart: unless-stopped
+
+  # Rspamd Spam Filter
+  rspamd:
+    build: ./docker/rspamd
+    container_name: koemail-rspamd
+    environment:
+      - REDIS_HOST=redis
+    volumes:
+      - ./docker/rspamd/config:/etc/rspamd/local.d
+      - rspamd_data:/var/lib/rspamd
+    ports:
+      - "11334:11334"
+    networks:
+      - mailnet
+    depends_on:
+      - redis
+    restart: unless-stopped
+
+  # ClamAV Antivirus
+  clamav:
+    image: clamav/clamav:latest
+    container_name: koemail-clamav
+    volumes:
+      - clamav_data:/var/lib/clamav
+    networks:
+      - mailnet
+    restart: unless-stopped
+
+  # RainLoop Webmail
+  rainloop:
+    build: ./docker/rainloop
+    container_name: koemail-rainloop
+    environment:
+      - DOMAIN=${DOMAIN:-example.com}
+    ports:
+      - "8080:80"
+    volumes:
+      - rainloop_data:/var/www/html/data
+    networks:
+      - mailnet
+    depends_on:
+      - dovecot
+      - postfix
+    restart: unless-stopped
+
+  # Backend API
+  api:
+    build: ./api
+    container_name: koemail-api
+    environment:
+      - NODE_ENV=production
+      - POSTGRES_HOST=postgresql
+      - POSTGRES_DB=mailserver
+      - POSTGRES_USER=mailuser
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-changeme123}
+      - REDIS_HOST=redis
+      - JWT_SECRET=${JWT_SECRET:-your-secret-key-change-me}
+      - DOMAIN=${DOMAIN:-example.com}
+    ports:
+      - "8000:3000"
+    networks:
+      - mailnet
+    depends_on:
+      - postgresql
+      - redis
+    restart: unless-stopped
+
+  # Admin UI
+  admin-ui:
+    build: ./admin-ui
+    container_name: koemail-admin-ui
+    environment:
+      - REACT_APP_API_URL=http://localhost:8000
+      - REACT_APP_DOMAIN=${DOMAIN:-example.com}
+    ports:
+      - "3000:80"
+    networks:
+      - mailnet
+    depends_on:
+      - api
+    restart: unless-stopped
+
+networks:
+  mailnet:
+    driver: bridge
+
+volumes:
+  postgresql_data:
+  redis_data:
+  mail_data:
+  rspamd_data:
+  clamav_data:
+  rainloop_data:
