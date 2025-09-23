@@ -78,12 +78,12 @@ smtpd_recipient_restrictions =
 # Data restrictions
 smtpd_data_restrictions = reject_unauth_pipelining
 
-# Milter settings for spam/virus filtering
-smtpd_milters = inet:rspamd:11332, inet:clamav:7357
-non_smtpd_milters = inet:rspamd:11332, inet:clamav:7357
-milter_protocol = 6
-milter_mail_macros = i {mail_addr} {client_addr} {client_name} {auth_authen}
-milter_default_action = accept
+# Milter settings for spam/virus filtering (temporarily disabled for basic SMTP)
+#smtpd_milters = inet:rspamd:11332, inet:clamav:7357
+#non_smtpd_milters = inet:rspamd:11332, inet:clamav:7357
+#milter_protocol = 6
+#milter_mail_macros = i {mail_addr} {client_addr} {client_name} {auth_authen}
+#milter_default_action = accept
 
 # Performance and resource limits
 default_process_limit = 100
