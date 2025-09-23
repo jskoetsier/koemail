@@ -5,6 +5,99 @@ All notable changes to KoeMail will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0] - 2025-09-23
+
+### Added
+- **Full SASL Authentication System**
+  - TCP-based SASL authentication between Postfix and Dovecot
+  - Secure inter-container communication via dedicated network ports
+  - Support for PLAIN and LOGIN authentication mechanisms
+  - Proper authentication service configuration for mail client access
+
+- **Advanced Spam Filtering Integration**
+  - Complete rspamd milter protocol integration with Postfix
+  - Redis-backed rspamd configuration for high performance
+  - Proper milter worker configuration for real-time scanning
+  - Spam filtering for both incoming and outgoing messages
+
+- **Production-Ready Container Architecture**
+  - Resolved all Docker container networking issues
+  - Fixed DNS resolution between containers using IP-based addressing
+  - Non-interactive package installations for reliable container builds
+  - Proper environment variable handling and configuration templating
+
+### Fixed
+- **Critical Container Issues**
+  - Fixed Postfix container startup failures due to SASL authentication errors
+  - Resolved Dovecot configuration syntax errors preventing service startup
+  - Fixed rspamd milter connection failures between containers
+  - Eliminated "host/service not found" errors in inter-container communication
+
+- **Docker Infrastructure**
+  - Added missing `gettext-base` package to containers requiring envsubst
+  - Fixed non-interactive Docker installations preventing build hangs
+  - Resolved container restart loops caused by configuration errors
+  - Fixed volume permission issues between Postfix and Dovecot containers
+
+- **Email Service Integration**
+  - Established working SMTP service with full authentication support
+  - Fixed IMAP/POP3 services with proper SQL backend integration
+  - Resolved milter protocol communication for spam filtering
+  - Fixed container throttling issues after failed connections
+
+### Changed
+- **Network Architecture**
+  - Migrated from Unix socket authentication to TCP-based SASL for container compatibility
+  - Implemented IP-based addressing for reliable inter-container communication
+  - Removed problematic shared volume approach in favor of network-based services
+  - Improved Docker network isolation and service discovery
+
+- **Configuration Management**
+  - Simplified Dovecot configuration for better reliability and maintainability
+  - Enhanced Postfix configuration with proper milter and SASL integration
+  - Updated rspamd worker configuration for optimal milter protocol support
+  - Standardized environment variable usage across all containers
+
+### Technical Improvements
+- **Service Reliability**
+  - All core email services now fully operational and production-ready
+  - Eliminated service startup dependencies causing circular waiting
+  - Improved error handling and graceful degradation
+  - Enhanced logging and debugging capabilities
+
+- **Performance Optimizations**
+  - Redis integration for rspamd caching and improved performance
+  - Optimized container resource usage and startup times
+  - Reduced memory footprint through configuration optimization
+  - Improved database connection pooling and query performance
+
+### Deployment
+- **Container Orchestration**
+  - All Docker containers now start reliably in correct dependency order
+  - Proper health checks and service monitoring implemented
+  - Automated environment configuration and secret management
+  - Simplified deployment process with single docker-compose command
+
+- **Production Readiness**
+  - Full email server functionality with sending and receiving capabilities
+  - Complete spam filtering and antivirus integration
+  - Web-based management interfaces fully functional
+  - Ready for production deployment with proper SSL configuration
+
+### Security
+- **Authentication & Authorization**
+  - Working SASL authentication for mail client connections
+  - Secure inter-service communication protocols
+  - Proper credential management and environment variable security
+  - Rate limiting and abuse protection mechanisms active
+
+### Documentation
+- **Updated Documentation**
+  - Comprehensive README with current status and capabilities
+  - Detailed changelog tracking all improvements and fixes
+  - Updated version information and project status badges
+  - Clear installation and setup instructions
+
 ## [1.0.1] - 2025-09-23
 
 ### Changed
