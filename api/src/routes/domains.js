@@ -40,7 +40,7 @@ router.post('/', async (req, res) => {
       'INSERT INTO domains (domain, description, active) VALUES ($1, $2, $3) RETURNING *',
       [value.domain, value.description, value.active]
     );
-    
+
     res.status(201).json(result.rows[0]);
   } catch (error) {
     if (error.code === '23505') {

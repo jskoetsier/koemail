@@ -58,10 +58,10 @@ router.post('/login', async (req, res) => {
 
     // Generate JWT token
     const token = jwt.sign(
-      { 
-        userId: user.id, 
-        email: user.email, 
-        admin: user.admin 
+      {
+        userId: user.id,
+        email: user.email,
+        admin: user.admin
       },
       process.env.JWT_SECRET,
       { expiresIn: '24h' }
@@ -87,12 +87,12 @@ router.post('/login', async (req, res) => {
 router.get('/profile', authenticateToken, async (req, res) => {
   try {
     const db = req.app.locals.db;
-    
+
     const result = await db.query(
       `SELECT u.id, u.email, u.name, u.admin, u.active, u.quota, u.created_at, u.last_login,
               qu.bytes_used, qu.message_count
-       FROM users u 
-       LEFT JOIN quota_usage qu ON u.id = qu.user_id 
+       FROM users u
+       LEFT JOIN quota_usage qu ON u.id = qu.user_id
        WHERE u.id = $1`,
       [req.user.userId]
     );
@@ -102,7 +102,7 @@ router.get('/profile', authenticateToken, async (req, res) => {
     }
 
     const user = result.rows[0];
-    
+
     res.json({
       id: user.id,
       email: user.email,

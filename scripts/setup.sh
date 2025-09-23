@@ -28,18 +28,18 @@ fi
 if [ ! -f .env ]; then
     echo "📝 Creating .env file from template..."
     cp .env.example .env
-    
+
     # Generate random passwords
     POSTGRES_PASSWORD=$(openssl rand -base64 32)
     JWT_SECRET=$(openssl rand -base64 64)
-    
+
     # Update .env with generated values
     sed -i.bak "s/your_secure_password_here/$POSTGRES_PASSWORD/g" .env
     sed -i.bak "s/your_jwt_secret_key_here_make_it_long_and_random/$JWT_SECRET/g" .env
-    
+
     # Clean up backup file
     rm .env.bak 2>/dev/null || true
-    
+
     echo "✅ .env file created with secure passwords"
     echo "⚠️  Please edit .env file to configure your domain and other settings"
     echo ""

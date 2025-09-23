@@ -57,7 +57,7 @@ app.use(helmet({
 
 // CORS configuration
 app.use(cors({
-  origin: process.env.NODE_ENV === 'production' 
+  origin: process.env.NODE_ENV === 'production'
     ? [`http://localhost:3000`, `https://${process.env.DOMAIN}`]
     : true,
   credentials: true,
@@ -85,12 +85,12 @@ app.get('/health', async (req, res) => {
   try {
     // Check database connection
     await db.query('SELECT 1');
-    
+
     // Check Redis connection
     await redis.ping();
-    
-    res.json({ 
-      status: 'healthy', 
+
+    res.json({
+      status: 'healthy',
       timestamp: new Date().toISOString(),
       services: {
         database: 'up',
@@ -98,10 +98,10 @@ app.get('/health', async (req, res) => {
       }
     });
   } catch (error) {
-    res.status(503).json({ 
-      status: 'unhealthy', 
+    res.status(503).json({
+      status: 'unhealthy',
       timestamp: new Date().toISOString(),
-      error: error.message 
+      error: error.message
     });
   }
 });
@@ -123,22 +123,22 @@ app.use('*', (req, res) => {
 // Global error handler
 app.use((err, req, res, next) => {
   console.error(err.stack);
-  
+
   if (err.type === 'entity.parse.failed') {
     return res.status(400).json({ error: 'Invalid JSON in request body' });
   }
-  
-  res.status(500).json({ 
-    error: process.env.NODE_ENV === 'production' 
-      ? 'Internal server error' 
-      : err.message 
+
+  res.status(500).json({
+    error: process.env.NODE_ENV === 'production'
+      ? 'Internal server error'
+      : err.message
   });
 });
 
 // Graceful shutdown
 process.on('SIGTERM', async () => {
   console.log('SIGTERM received, shutting down gracefully');
-  
+
   try {
     await db.end();
     redis.disconnect();

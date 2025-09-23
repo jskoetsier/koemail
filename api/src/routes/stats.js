@@ -7,7 +7,7 @@ router.use(authenticateToken, requireAdmin);
 router.get('/', async (req, res) => {
   try {
     const db = req.app.locals.db;
-    
+
     // Get basic stats
     const stats = await Promise.all([
       db.query('SELECT COUNT(*) as total_users FROM users WHERE active = true'),

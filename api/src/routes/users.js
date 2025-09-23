@@ -106,7 +106,7 @@ router.get('/:id', async (req, res) => {
     }
 
     const user = result.rows[0];
-    
+
     res.json({
       id: user.id,
       email: user.email,
@@ -201,7 +201,7 @@ router.post('/', requireAdmin, async (req, res) => {
 router.put('/:id', async (req, res) => {
   try {
     const userId = parseInt(req.params.id);
-    
+
     // Check permissions
     if (!req.user.admin && req.user.userId !== userId) {
       return res.status(403).json({ error: 'Insufficient permissions' });
@@ -246,7 +246,7 @@ router.put('/:id', async (req, res) => {
     values.push(userId);
 
     const result = await db.query(`
-      UPDATE users 
+      UPDATE users
       SET ${updates.join(', ')}
       WHERE id = $${paramCount}
       RETURNING id, email, name, admin, active, quota, updated_at
@@ -282,7 +282,7 @@ router.delete('/:id', requireAdmin, async (req, res) => {
     }
 
     const result = await db.query('DELETE FROM users WHERE id = $1 RETURNING email', [userId]);
-    
+
     if (result.rows.length === 0) {
       return res.status(404).json({ error: 'User not found' });
     }

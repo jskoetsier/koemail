@@ -9,9 +9,11 @@ services:
       POSTGRES_DB: mailserver
       POSTGRES_USER: mailuser
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-changeme123}
+      DOMAIN: ${DOMAIN:-example.com}
     volumes:
       - postgresql_data:/var/lib/postgresql/data
       - ./docker/postgresql/init:/docker-entrypoint-initdb.d
+      - ./docker/postgresql/setup-domain.sh:/docker-entrypoint-initdb.d/00-setup-domain.sh
     networks:
       - mailnet
     restart: unless-stopped

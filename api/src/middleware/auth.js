@@ -13,7 +13,7 @@ const authenticateToken = (req, res, next) => {
     if (err) {
       return res.status(403).json({ error: 'Invalid or expired token' });
     }
-    
+
     req.user = user;
     next();
   });
@@ -31,11 +31,11 @@ const requireAdmin = (req, res, next) => {
 const requireOwnershipOrAdmin = (userIdParam = 'userId') => {
   return (req, res, next) => {
     const resourceUserId = req.params[userIdParam];
-    
+
     if (req.user.admin || req.user.userId.toString() === resourceUserId) {
       return next();
     }
-    
+
     return res.status(403).json({ error: 'Insufficient permissions' });
   };
 };
