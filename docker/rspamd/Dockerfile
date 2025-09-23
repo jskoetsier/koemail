@@ -1,10 +1,14 @@
 FROM ubuntu:22.04
 
+# Set environment to non-interactive to prevent prompts
+ENV DEBIAN_FRONTEND=noninteractive
+
 # Install packages
 RUN apt-get update && apt-get install -y \
     rspamd \
     redis-tools \
     supervisor \
+    gettext-base \
     && rm -rf /var/lib/apt/lists/*
 
 # Create necessary directories

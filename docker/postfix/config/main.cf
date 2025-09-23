@@ -22,13 +22,13 @@ virtual_minimum_uid = 1000
 virtual_uid_maps = static:1000
 virtual_gid_maps = static:1000
 
-# SMTP Authentication (temporarily disabled for basic SMTP testing)
-#smtpd_sasl_auth_enable = yes
-#smtpd_sasl_type = dovecot
-#smtpd_sasl_path = private/auth
-#smtpd_sasl_security_options = noanonymous
-#smtpd_sasl_local_domain = ${DOMAIN}
-#broken_sasl_auth_clients = yes
+# SMTP Authentication
+smtpd_sasl_auth_enable = yes
+smtpd_sasl_type = dovecot
+smtpd_sasl_path = private/auth
+smtpd_sasl_security_options = noanonymous
+smtpd_sasl_local_domain = ${DOMAIN}
+broken_sasl_auth_clients = yes
 
 # TLS Configuration
 smtpd_use_tls = yes
@@ -45,6 +45,7 @@ smtp_tls_security_level = may
 # Client restrictions  
 smtpd_client_restrictions =
     permit_mynetworks,
+    permit_sasl_authenticated,
     reject_rbl_client zen.spamhaus.org,
     reject_rbl_client bl.spamcop.net,
     permit
@@ -52,6 +53,7 @@ smtpd_client_restrictions =
 # Helo restrictions
 smtpd_helo_restrictions =
     permit_mynetworks,
+    permit_sasl_authenticated,
     reject_invalid_helo_hostname,
     reject_non_fqdn_helo_hostname,
     permit
@@ -59,6 +61,7 @@ smtpd_helo_restrictions =
 # Sender restrictions
 smtpd_sender_restrictions =
     permit_mynetworks,
+    permit_sasl_authenticated,
     reject_non_fqdn_sender,
     reject_unknown_sender_domain,
     permit
@@ -66,6 +69,7 @@ smtpd_sender_restrictions =
 # Recipient restrictions
 smtpd_recipient_restrictions =
     permit_mynetworks,
+    permit_sasl_authenticated,
     reject_non_fqdn_recipient,
     reject_unknown_recipient_domain,
     reject_unauth_destination,
@@ -74,12 +78,12 @@ smtpd_recipient_restrictions =
 # Data restrictions
 smtpd_data_restrictions = reject_unauth_pipelining
 
-# Milter settings for spam/virus filtering (temporarily disabled for basic SMTP)
-#smtpd_milters = inet:rspamd:11332, inet:clamav:7357
-#non_smtpd_milters = inet:rspamd:11332, inet:clamav:7357
-#milter_protocol = 6
-#milter_mail_macros = i {mail_addr} {client_addr} {client_name} {auth_authen}
-#milter_default_action = accept
+# Milter settings for spam filtering (ClamAV temporarily disabled)
+smtpd_milters = inet:rspamd:11332
+non_smtpd_milters = inet:rspamd:11332
+milter_protocol = 6
+milter_mail_macros = i {mail_addr} {client_addr} {client_name} {auth_authen}
+milter_default_action = accept
 
 # Performance and resource limits
 default_process_limit = 100
