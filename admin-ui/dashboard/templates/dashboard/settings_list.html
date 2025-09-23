@@ -36,9 +36,9 @@
                                 <option value="false" {% if setting.value == 'false' %}selected{% endif %}>No</option>
                             </select>
                         {% else %}
-                            <input type="{% if setting.type == 'integer' %}number{% else %}text{% endif %}" 
-                                   name="value" 
-                                   value="{{ setting.value }}" 
+                            <input type="{% if setting.type == 'integer' %}number{% else %}text{% endif %}"
+                                   name="value"
+                                   value="{{ setting.value }}"
                                    class="form-control me-2"
                                    {% if setting.type == 'integer' %}min="0"{% endif %}>
                         {% endif %}

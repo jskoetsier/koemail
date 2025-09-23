@@ -2,6 +2,7 @@ from django import template
 
 register = template.Library()
 
+
 @register.filter
 def div(value, arg):
     """Divide value by arg"""
@@ -10,6 +11,7 @@ def div(value, arg):
     except (ValueError, ZeroDivisionError, TypeError):
         return 0
 
+
 @register.filter
 def mul(value, arg):
     """Multiply value by arg"""
@@ -17,6 +19,7 @@ def mul(value, arg):
         return float(value) * float(arg)
     except (ValueError, TypeError):
         return 0
+
 
 @register.filter
 def percentage(value, total):

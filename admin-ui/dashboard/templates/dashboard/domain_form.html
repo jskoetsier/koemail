@@ -20,13 +20,13 @@
             <div class="card-body">
                 <form method="post">
                     {% csrf_token %}
-                    
+
                     <div class="mb-3">
                         <label for="domain" class="form-label">Domain Name <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" id="domain" name="domain" 
-                               value="{{ domain.domain|default:'' }}" 
-                               {% if domain %}readonly{% endif %} 
-                               required 
+                        <input type="text" class="form-control" id="domain" name="domain"
+                               value="{{ domain.domain|default:'' }}"
+                               {% if domain %}readonly{% endif %}
+                               required
                                pattern="^[a-zA-Z0-9][a-zA-Z0-9-]{0,61}[a-zA-Z0-9]?\.[a-zA-Z]{2,}$"
                                placeholder="example.com">
                         {% if domain %}
@@ -38,14 +38,14 @@
 
                     <div class="mb-3">
                         <label for="description" class="form-label">Description</label>
-                        <textarea class="form-control" id="description" name="description" rows="3" 
+                        <textarea class="form-control" id="description" name="description" rows="3"
                                   placeholder="Optional description for this domain">{{ domain.description|default:'' }}</textarea>
                         <div class="form-text">Optional description to help identify this domain.</div>
                     </div>
 
                     <div class="mb-4">
                         <div class="form-check">
-                            <input type="checkbox" class="form-check-input" id="active" name="active" 
+                            <input type="checkbox" class="form-check-input" id="active" name="active"
                                    {% if domain.active or not domain %}checked{% endif %}>
                             <label class="form-check-label" for="active">
                                 Active
@@ -77,10 +77,10 @@
                     <dl class="row">
                         <dt class="col-sm-4">Created:</dt>
                         <dd class="col-sm-8">{{ domain.created_at|date:"M d, Y H:i" }}</dd>
-                        
+
                         <dt class="col-sm-4">Last Updated:</dt>
                         <dd class="col-sm-8">{{ domain.updated_at|date:"M d, Y H:i" }}</dd>
-                        
+
                         <dt class="col-sm-4">Total Users:</dt>
                         <dd class="col-sm-8">
                             <span class="badge bg-info">{{ domain.user_count|default:0 }}</span>

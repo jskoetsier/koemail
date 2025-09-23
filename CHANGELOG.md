@@ -5,6 +5,31 @@ All notable changes to KoeMail will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.1] - 2025-09-23
+
+### Changed
+- **Complete Admin Interface Redesign**
+  - Replaced React frontend with Django + Bootstrap admin interface
+  - Server-side rendering eliminates routing issues
+  - Session-based authentication using existing user database
+  - Beautiful, responsive Bootstrap 5 UI design
+  - Complete user management with CRUD operations
+  - Full domain management with user count tracking
+  - Settings management with categorized inline editing
+
+### Fixed
+- Resolved React Router 404 errors on direct navigation
+- Fixed admin interface accessibility and functionality
+- Improved error handling and user feedback
+- Better mobile responsiveness
+
+### Technical Changes
+- Migrated from React/Node.js frontend to Django
+- Added Gunicorn + WhiteNoise for production serving
+- Integrated with existing PostgreSQL schema using Django ORM
+- Added bcrypt compatibility for password hashing
+- Docker containerization for Django application
+
 ## [1.0.0] - 2025-09-23
 
 ### Added
@@ -24,7 +49,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Domain and alias management endpoints
   - Basic quota tracking and management endpoints
   - System health monitoring endpoint
-  - React admin interface foundation (basic components - full functionality in development)
+  - Django admin interface with Bootstrap UI (replaces React)
 
 - **Security Features**
   - SSL/TLS support with automatic self-signed certificate generation
@@ -70,14 +95,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Environment configuration guide
 
 ### Technical Details
-- **Languages**: JavaScript (Node.js), React, SQL, Bash
+- **Languages**: JavaScript (Node.js), Python (Django), SQL, Bash
 - **Databases**: PostgreSQL 15, Redis 7
 - **Email Services**: Postfix 3.x, Dovecot 2.x
 - **Security**: Rspamd, ClamAV
-- **Frontend**: React 18, Tailwind CSS
-- **Backend**: Express.js, JWT, bcrypt
+- **Frontend**: Django Templates, Bootstrap 5
+- **Backend**: Express.js (API), Django (Admin UI), bcrypt
 - **Deployment**: Docker, docker-compose
-- **Development**: Modern ES6+, async/await patterns
+- **Development**: Modern ES6+, async/await patterns, Django ORM
 
 ### Configuration
 - Support for custom domains (defaulting to koetsier.it)
@@ -122,14 +147,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Planned for Next Release (1.1.0)
-- Complete React admin interface implementation
-- Real-time dashboard statistics
-- Enhanced user quota management
-- Email queue monitoring
-- Spam quarantine management interface
+- Enhanced Django admin interface with Ajax updates
+- Real-time dashboard statistics with WebSocket support
+- Advanced user quota management and visualization
+- Email queue monitoring interface
+- Spam quarantine management with bulk operations
 - API documentation with Swagger/OpenAPI
 - Two-factor authentication for admin panel
 - Improved error handling and logging
+- Django REST framework integration
 
 ---
 

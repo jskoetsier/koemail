@@ -13,7 +13,7 @@ A comprehensive, self-hosted email server with modern web interfaces, built with
 - **RainLoop**: Modern webmail client with clean interface
 
 ### Management Interfaces
-- **Admin UI**: React-based single-page application for server management
+- **Admin UI**: Django-based admin interface with Bootstrap UI for server management
 - **Webmail**: RainLoop-powered interface for end users
 - **API**: RESTful API for programmatic access
 
@@ -66,7 +66,7 @@ koemail/
 │   ├── rspamd/            # Spam filtering
 │   ├── clamav/            # Antivirus
 │   └── rainloop/          # Webmail client
-├── admin-ui/              # React admin interface
+├── admin-ui/              # Django admin interface
 ├── api/                   # Backend API service
 ├── scripts/               # Utility scripts
 └── docker-compose.yml     # Orchestration

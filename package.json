@@ -1,7 +1,7 @@
 {
   "name": "koemail",
-  "version": "1.0.0",
-  "description": "Complete, self-hosted email server with modern web interfaces",
+  "version": "1.0.1",
+  "description": "Complete, self-hosted email server with Django admin interface",
   "main": "index.js",
   "scripts": {
     "setup": "./scripts/setup.sh",
