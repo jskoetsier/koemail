@@ -3,7 +3,7 @@ version: '3.8'
 services:
   # PostgreSQL Database
   postgresql:
-    image: postgres:15-alpine
+    build: ./docker/postgresql
     container_name: koemail-postgresql
     environment:
       POSTGRES_DB: mailserver
@@ -12,8 +12,6 @@ services:
       DOMAIN: ${DOMAIN:-example.com}
     volumes:
       - postgresql_data:/var/lib/postgresql/data
-      - ./docker/postgresql/init:/docker-entrypoint-initdb.d
-      - ./docker/postgresql/setup-domain.sh:/docker-entrypoint-initdb.d/00-setup-domain.sh
     networks:
       - mailnet
     restart: unless-stopped
