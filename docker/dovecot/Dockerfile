@@ -36,9 +36,9 @@ RUN groupadd -g 1000 vmail
 RUN useradd -g vmail -u 1000 vmail -d /var/mail
 RUN chown -R vmail:vmail /var/mail
 
-# Create postfix user and group for SASL auth socket
-RUN groupadd -g 102 postfix
-RUN useradd -g postfix -u 102 postfix -d /var/spool/postfix -s /bin/false
+# Create postfix user and group for SASL auth socket (flexible GID/UID assignment)
+RUN groupadd postfix || true
+RUN useradd -g postfix postfix -d /var/spool/postfix -s /bin/false || true
 RUN mkdir -p /var/spool/postfix/private
 RUN chown -R postfix:postfix /var/spool/postfix
 
