@@ -144,19 +144,23 @@ services:
       - redis
     restart: unless-stopped
 
-  # Admin UI
+  # Admin UI (Django)
   admin-ui:
     build: ./admin-ui
     container_name: koemail-admin-ui
     environment:
-      - REACT_APP_API_URL=http://localhost:8000
-      - REACT_APP_DOMAIN=${DOMAIN:-example.com}
+      - SECRET_KEY=${JWT_SECRET:-your-secret-key-change-me}
+      - DEBUG=False
+      - POSTGRES_HOST=postgresql
+      - POSTGRES_DB=mailserver
+      - POSTGRES_USER=mailuser
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-changeme123}
     ports:
-      - "3000:80"
+      - "3000:8000"
     networks:
       - mailnet
     depends_on:
-      - api
+      - postgresql
     restart: unless-stopped
 
 networks:

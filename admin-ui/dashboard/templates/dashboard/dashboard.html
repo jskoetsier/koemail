@@ -1,0 +1,218 @@
+{% extends 'dashboard/base.html' %}
+
+{% block title %}Dashboard - KoeMail Admin{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">
+        <i class="bi bi-speedometer2 me-2"></i>Dashboard
+    </h1>
+</div>
+
+<p class="lead">Welcome back, {{ user_name }}! Here's your KoeMail server overview.</p>
+
+<!-- Statistics Cards -->
+<div class="row mb-4">
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-primary shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                            Total Users
+                        </div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">{{ stats.users }}</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="bi bi-people fs-2 text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-success shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                            Active Domains
+                        </div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">{{ stats.domains }}</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="bi bi-globe fs-2 text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-info shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                            Total Aliases
+                        </div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">{{ stats.aliases }}</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="bi bi-arrow-left-right fs-2 text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-warning shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                            Storage Used
+                        </div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">{{ stats.storage|filesizeformat }}</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="bi bi-hdd fs-2 text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Content Row -->
+<div class="row">
+    <!-- Quick Start -->
+    <div class="col-lg-6 mb-4">
+        <div class="card shadow">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">
+                    <i class="bi bi-rocket me-2"></i>Quick Start
+                </h6>
+            </div>
+            <div class="card-body">
+                <p>Your KoeMail server is running and ready for configuration!</p>
+                <ul class="list-unstyled">
+                    <li class="mb-2">
+                        <i class="bi bi-check-circle text-success me-2"></i>
+                        <a href="{% url 'users_list' %}" class="text-decoration-none">Create users</a> in the Users section
+                    </li>
+                    <li class="mb-2">
+                        <i class="bi bi-check-circle text-success me-2"></i>
+                        <a href="{% url 'domains_list' %}" class="text-decoration-none">Configure domains</a> and aliases
+                    </li>
+                    <li class="mb-2">
+                        <i class="bi bi-check-circle text-success me-2"></i>
+                        Access <a href="http://koetsier.it:8080" target="_blank" class="text-decoration-none">webmail</a>
+                    </li>
+                    <li>
+                        <i class="bi bi-check-circle text-success me-2"></i>
+                        Check <a href="{% url 'settings_list' %}" class="text-decoration-none">server settings</a> and monitoring
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- System Status -->
+    <div class="col-lg-6 mb-4">
+        <div class="card shadow">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">
+                    <i class="bi bi-lightning me-2"></i>System Status
+                </h6>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-6 mb-3">
+                        <div class="d-flex justify-content-between">
+                            <span>Email Server</span>
+                            <span class="badge bg-success">Running</span>
+                        </div>
+                    </div>
+                    <div class="col-6 mb-3">
+                        <div class="d-flex justify-content-between">
+                            <span>Database</span>
+                            <span class="badge bg-success">Connected</span>
+                        </div>
+                    </div>
+                    <div class="col-6 mb-3">
+                        <div class="d-flex justify-content-between">
+                            <span>Spam Filter</span>
+                            <span class="badge bg-success">Active</span>
+                        </div>
+                    </div>
+                    <div class="col-6 mb-3">
+                        <div class="d-flex justify-content-between">
+                            <span>Antivirus</span>
+                            <span class="badge bg-success">Active</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Server Information -->
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card shadow">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">
+                    <i class="bi bi-info-circle me-2"></i>Server Information
+                </h6>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6 class="font-weight-bold">Email Protocols</h6>
+                        <ul class="list-unstyled text-muted">
+                            <li><i class="bi bi-dot"></i> SMTP: Port 25, 587 (TLS), 465 (SSL)</li>
+                            <li><i class="bi bi-dot"></i> IMAP: Port 143 (STARTTLS), 993 (SSL)</li>
+                            <li><i class="bi bi-dot"></i> POP3: Port 110 (STARTTLS), 995 (SSL)</li>
+                            <li><i class="bi bi-dot"></i> ManageSieve: Port 4190</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <h6 class="font-weight-bold">Security Features</h6>
+                        <ul class="list-unstyled text-muted">
+                            <li><i class="bi bi-dot"></i> Rspamd spam filtering</li>
+                            <li><i class="bi bi-dot"></i> ClamAV antivirus scanning</li>
+                            <li><i class="bi bi-dot"></i> TLS/SSL encryption</li>
+                            <li><i class="bi bi-dot"></i> PostgreSQL backend security</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.border-left-primary {
+    border-left: 0.25rem solid #4e73df !important;
+}
+.border-left-success {
+    border-left: 0.25rem solid #1cc88a !important;
+}
+.border-left-info {
+    border-left: 0.25rem solid #36b9cc !important;
+}
+.border-left-warning {
+    border-left: 0.25rem solid #f6c23e !important;
+}
+.text-gray-300 {
+    color: #dddfeb !important;
+}
+.text-gray-800 {
+    color: #5a5c69 !important;
+}
+</style>
+{% endblock %}

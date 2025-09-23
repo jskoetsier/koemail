@@ -1,0 +1,160 @@
+{% extends 'dashboard/base.html' %}
+
+{% block title %}Users - KoeMail Admin{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">
+        <i class="bi bi-people me-2"></i>Users
+    </h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+        <a href="{% url 'user_create' %}" class="btn btn-primary">
+            <i class="bi bi-plus-circle me-1"></i>Add User
+        </a>
+    </div>
+</div>
+
+<!-- Search -->
+<div class="row mb-3">
+    <div class="col-md-6">
+        <form method="get" class="d-flex">
+            <input type="text" class="form-control me-2" name="search" placeholder="Search users..." value="{{ search }}">
+            <button type="submit" class="btn btn-outline-secondary">
+                <i class="bi bi-search"></i>
+            </button>
+        </form>
+    </div>
+</div>
+
+<!-- Users Table -->
+<div class="card shadow">
+    <div class="card-body">
+        {% if page_obj.object_list %}
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>User</th>
+                            <th>Role</th>
+                            <th>Quota Usage</th>
+                            <th>Status</th>
+                            <th>Last Login</th>
+                            <th width="120">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user in page_obj.object_list %}
+                        <tr>
+                            <td>
+                                <div>
+                                    <strong>{{ user.name }}</strong>
+                                    <br>
+                                    <small class="text-muted">{{ user.email }}</small>
+                                </div>
+                            </td>
+                            <td>
+                                {% if user.admin %}
+                                    <span class="badge bg-purple">Admin</span>
+                                {% else %}
+                                    <span class="badge bg-secondary">User</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if user.quotausage %}
+                                <div>
+                                    <div class="small">{{ user.quotausage.bytes_used|filesizeformat }} / {{ user.quota|filesizeformat }}</div>
+                                    <div class="progress" style="height: 6px;">
+                                        <div class="progress-bar" role="progressbar" 
+                                             style="width: {% if user.quota > 0 %}{{ user.quotausage.bytes_used|floatformat:0|mul:100|div:user.quota }}{% else %}0{% endif %}%">
+                                        </div>
+                                    </div>
+                                </div>
+                                {% else %}
+                                <span class="text-muted">0 B / {{ user.quota|filesizeformat }}</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if user.active %}
+                                    <span class="badge bg-success">Active</span>
+                                {% else %}
+                                    <span class="badge bg-danger">Inactive</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if user.last_login %}
+                                    {{ user.last_login|date:"M d, Y" }}
+                                {% else %}
+                                    <span class="text-muted">Never</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <div class="btn-group btn-group-sm">
+                                    <a href="{% url 'user_edit' user.id %}" class="btn btn-outline-primary btn-sm">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                    <a href="{% url 'user_delete' user.id %}" class="btn btn-outline-danger btn-sm">
+                                        <i class="bi bi-trash"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination -->
+            {% if page_obj.has_other_pages %}
+                <nav aria-label="User pagination">
+                    <ul class="pagination justify-content-center">
+                        {% if page_obj.has_previous %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if search %}&search={{ search }}{% endif %}">Previous</a>
+                            </li>
+                        {% endif %}
+
+                        {% for num in page_obj.paginator.page_range %}
+                            {% if page_obj.number == num %}
+                                <li class="page-item active">
+                                    <span class="page-link">{{ num }}</span>
+                                </li>
+                            {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ num }}{% if search %}&search={{ search }}{% endif %}">{{ num }}</a>
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+
+                        {% if page_obj.has_next %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if search %}&search={{ search }}{% endif %}">Next</a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            {% endif %}
+
+        {% else %}
+            <div class="text-center py-5">
+                <i class="bi bi-people fs-1 text-muted"></i>
+                <h4 class="mt-3">No users found</h4>
+                <p class="text-muted">{% if search %}No users match your search criteria.{% else %}Get started by creating your first user.{% endif %}</p>
+                {% if not search %}
+                    <a href="{% url 'user_create' %}" class="btn btn-primary">
+                        <i class="bi bi-plus-circle me-1"></i>Add User
+                    </a>
+                {% endif %}
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<style>
+.bg-purple {
+    background-color: #6f42c1 !important;
+}
+.progress {
+    background-color: #e9ecef;
+}
+</style>
+{% endblock %}

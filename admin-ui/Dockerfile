@@ -1,32 +1,30 @@
-# Build stage
-FROM node:18-alpine as build
+FROM python:3.11-slim
 
 WORKDIR /app
 
-# Copy package files
-COPY package*.json ./
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    postgresql-client \
+    && rm -rf /var/lib/apt/lists/*
 
-# Install dependencies (including dev dependencies for build)
-RUN npm install
+# Copy requirements and install Python dependencies
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy source code
-COPY public/ ./public/
-COPY src/ ./src/
+# Copy application code
+COPY . .
 
-# Build the app
-RUN npm run build
-
-# Production stage
-FROM nginx:alpine
-
-# Copy build files
-COPY --from=build /app/build /usr/share/nginx/html
-
-# Copy nginx configuration
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+# Create non-root user
+RUN groupadd -r appuser && useradd -r -g appuser appuser
+RUN chown -R appuser:appuser /app
+USER appuser
 
 # Expose port
-EXPOSE 80
+EXPOSE 8000
 
-# Start nginx
-CMD ["nginx", "-g", "daemon off;"]
+# Health check
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+  CMD python -c "import urllib.request; urllib.request.urlopen('http://localhost:8000/health/')"
+
+# Start the application
+CMD ["gunicorn", "--bind", "0.0.0.0:8000", "--workers", "3", "koemail_admin.wsgi:application"]
