@@ -6,6 +6,8 @@ RUN apt-get update && apt-get install -y \
     postfix-pgsql \
     supervisor \
     rsyslog \
+    postgresql-client \
+    gettext-base \
     && rm -rf /var/lib/apt/lists/*
 
 # Configure postfix to not start automatically

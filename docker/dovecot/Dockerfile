@@ -9,6 +9,7 @@ RUN apt-get update && apt-get install -y \
     dovecot-sieve \
     supervisor \
     postgresql-client \
+    gettext-base \
     && rm -rf /var/lib/apt/lists/*
 
 # Create necessary directories

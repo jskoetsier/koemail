@@ -18,6 +18,9 @@ const spamRoutes = require('./routes/spam');
 const app = express();
 const port = process.env.PORT || 3000;
 
+// Trust proxy settings for reverse proxy deployments
+app.set('trust proxy', 1);
+
 // Database connection
 const db = new Pool({
   host: process.env.POSTGRES_HOST || 'postgresql',
