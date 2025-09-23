@@ -8,8 +8,11 @@ const router = express.Router();
 // Apply authentication to all routes
 router.use(authenticateToken);
 
-// Custom email validation that allows IP addresses
-const emailWithIPSchema = Joi.string().pattern(/^[^\s@]+@[^\s@]+\.[^\s@]+$|^[^\s@]+@\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/).required();
+// Custom email validation that allows IP addresses and regular domains
+const emailWithIPSchema = Joi.alternatives().try(
+  Joi.string().email(), // Standard email validation
+  Joi.string().pattern(/^[^\s@]+@\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/) // Email with IP address
+).required();
 
 // Validation schemas
 const createUserSchema = Joi.object({
