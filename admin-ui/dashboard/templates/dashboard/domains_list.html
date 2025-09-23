@@ -1,0 +1,115 @@
+{% extends 'dashboard/base.html' %}
+
+{% block title %}Domains - KoeMail Admin{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">
+        <i class="bi bi-globe me-2"></i>Domains
+    </h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+        <a href="{% url 'domain_create' %}" class="btn btn-primary">
+            <i class="bi bi-plus-circle me-1"></i>Add Domain
+        </a>
+    </div>
+</div>
+
+<!-- Domains Table -->
+<div class="card shadow">
+    <div class="card-body">
+        {% if domains %}
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Domain</th>
+                            <th>Description</th>
+                            <th>Users</th>
+                            <th>Status</th>
+                            <th>Created</th>
+                            <th width="120">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for domain in domains %}
+                        <tr>
+                            <td>
+                                <strong>{{ domain.domain }}</strong>
+                            </td>
+                            <td>{{ domain.description|default:"-" }}</td>
+                            <td>
+                                <span class="badge bg-info">{{ domain.user_count }}</span>
+                            </td>
+                            <td>
+                                {% if domain.active %}
+                                    <span class="badge bg-success">Active</span>
+                                {% else %}
+                                    <span class="badge bg-danger">Inactive</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ domain.created_at|date:"M d, Y" }}</td>
+                            <td>
+                                <div class="btn-group btn-group-sm">
+                                    <a href="{% url 'domain_edit' domain.id %}" class="btn btn-outline-primary btn-sm">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                    {% if domain.user_count == 0 %}
+                                        <button type="button" class="btn btn-outline-danger btn-sm" 
+                                                onclick="confirmDelete('{{ domain.domain }}', '{% url 'domain_edit' domain.id %}')">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    {% else %}
+                                        <button type="button" class="btn btn-outline-secondary btn-sm" disabled 
+                                                title="Cannot delete domain with users">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    {% endif %}
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <div class="text-center py-5">
+                <i class="bi bi-globe fs-1 text-muted"></i>
+                <h4 class="mt-3">No domains found</h4>
+                <p class="text-muted">Get started by creating your first domain.</p>
+                <a href="{% url 'domain_create' %}" class="btn btn-primary">
+                    <i class="bi bi-plus-circle me-1"></i>Add Domain
+                </a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+function confirmDelete(domainName, deleteUrl) {
+    if (confirm('Are you sure you want to delete domain "' + domainName + '"? This action cannot be undone.')) {
+        // Create a form and submit it for DELETE request
+        var form = document.createElement('form');
+        form.method = 'POST';
+        form.action = deleteUrl;
+        
+        // Add CSRF token
+        var csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+        var csrfInput = document.createElement('input');
+        csrfInput.type = 'hidden';
+        csrfInput.name = 'csrfmiddlewaretoken';
+        csrfInput.value = csrfToken;
+        form.appendChild(csrfInput);
+        
+        // Add delete confirmation
+        var deleteInput = document.createElement('input');
+        deleteInput.type = 'hidden';
+        deleteInput.name = 'delete';
+        deleteInput.value = 'true';
+        form.appendChild(deleteInput);
+        
+        document.body.appendChild(form);
+        form.submit();
+    }
+}
+</script>
+{% endblock %}

@@ -40,7 +40,7 @@ router.get('/:id', async (req, res) => {
   try {
     const db = req.app.locals.db;
     const domainId = parseInt(req.params.id);
-    
+
     const result = await db.query(`
       SELECT d.*, COUNT(u.id) as user_count
       FROM domains d
@@ -73,7 +73,7 @@ router.post('/', async (req, res) => {
       'INSERT INTO domains (domain, description, active) VALUES ($1, $2, $3) RETURNING *',
       [value.domain.toLowerCase(), value.description || null, value.active]
     );
-    
+
     res.status(201).json(result.rows[0]);
   } catch (error) {
     console.error('Create domain error:', error);
@@ -89,7 +89,7 @@ router.put('/:id', async (req, res) => {
   try {
     const domainId = parseInt(req.params.id);
     const { error, value } = updateDomainSchema.validate(req.body);
-    
+
     if (error) {
       return res.status(400).json({ error: error.details[0].message });
     }
@@ -123,7 +123,7 @@ router.put('/:id', async (req, res) => {
     values.push(domainId);
 
     const result = await db.query(`
-      UPDATE domains 
+      UPDATE domains
       SET ${updates.join(', ')}
       WHERE id = $${paramCount}
       RETURNING *
@@ -149,7 +149,7 @@ router.delete('/:id', async (req, res) => {
     }
 
     const result = await db.query('DELETE FROM domains WHERE id = $1 RETURNING domain', [domainId]);
-    
+
     if (result.rows.length === 0) {
       return res.status(404).json({ error: 'Domain not found' });
     }

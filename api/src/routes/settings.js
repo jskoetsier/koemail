@@ -27,11 +27,11 @@ router.get('/:key', async (req, res) => {
   try {
     const db = req.app.locals.db;
     const result = await db.query('SELECT * FROM system_settings WHERE key = $1', [req.params.key]);
-    
+
     if (result.rows.length === 0) {
       return res.status(404).json({ error: 'Setting not found' });
     }
-    
+
     res.json(result.rows[0]);
   } catch (error) {
     console.error('Get setting error:', error);
@@ -48,7 +48,7 @@ router.put('/:key', async (req, res) => {
     }
 
     const db = req.app.locals.db;
-    
+
     // Check if setting exists
     const existingSetting = await db.query('SELECT * FROM system_settings WHERE key = $1', [req.params.key]);
     if (existingSetting.rows.length === 0) {

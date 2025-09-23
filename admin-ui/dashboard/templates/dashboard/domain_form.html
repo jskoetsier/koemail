@@ -1,0 +1,116 @@
+{% extends 'dashboard/base.html' %}
+
+{% block title %}{{ action }} Domain - KoeMail Admin{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">
+        <i class="bi bi-globe me-2"></i>{{ action }} Domain
+    </h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+        <a href="{% url 'domains_list' %}" class="btn btn-secondary">
+            <i class="bi bi-arrow-left me-1"></i>Back to Domains
+        </a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card shadow">
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    
+                    <div class="mb-3">
+                        <label for="domain" class="form-label">Domain Name <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="domain" name="domain" 
+                               value="{{ domain.domain|default:'' }}" 
+                               {% if domain %}readonly{% endif %} 
+                               required 
+                               pattern="^[a-zA-Z0-9][a-zA-Z0-9-]{0,61}[a-zA-Z0-9]?\.[a-zA-Z]{2,}$"
+                               placeholder="example.com">
+                        {% if domain %}
+                            <div class="form-text">Domain name cannot be changed after creation.</div>
+                        {% else %}
+                            <div class="form-text">Enter a valid domain name (e.g., example.com)</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Description</label>
+                        <textarea class="form-control" id="description" name="description" rows="3" 
+                                  placeholder="Optional description for this domain">{{ domain.description|default:'' }}</textarea>
+                        <div class="form-text">Optional description to help identify this domain.</div>
+                    </div>
+
+                    <div class="mb-4">
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" id="active" name="active" 
+                                   {% if domain.active or not domain %}checked{% endif %}>
+                            <label class="form-check-label" for="active">
+                                Active
+                            </label>
+                        </div>
+                        <div class="form-text">Inactive domains will not accept new email.</div>
+                    </div>
+
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a href="{% url 'domains_list' %}" class="btn btn-secondary me-md-2">Cancel</a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-check-circle me-1"></i>{{ action }} Domain
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card shadow">
+            <div class="card-header">
+                <h6 class="m-0 font-weight-bold text-primary">
+                    <i class="bi bi-info-circle me-1"></i>Domain Information
+                </h6>
+            </div>
+            <div class="card-body">
+                {% if domain %}
+                    <dl class="row">
+                        <dt class="col-sm-4">Created:</dt>
+                        <dd class="col-sm-8">{{ domain.created_at|date:"M d, Y H:i" }}</dd>
+                        
+                        <dt class="col-sm-4">Last Updated:</dt>
+                        <dd class="col-sm-8">{{ domain.updated_at|date:"M d, Y H:i" }}</dd>
+                        
+                        <dt class="col-sm-4">Total Users:</dt>
+                        <dd class="col-sm-8">
+                            <span class="badge bg-info">{{ domain.user_count|default:0 }}</span>
+                        </dd>
+                    </dl>
+                {% else %}
+                    <p class="text-muted">Domain information will be available after creation.</p>
+                {% endif %}
+
+                <hr>
+
+                <h6 class="font-weight-bold">DNS Configuration:</h6>
+                <p class="text-muted small">After creating this domain, configure these DNS records:</p>
+                <ul class="list-unstyled text-muted small">
+                    <li><strong>MX:</strong> 10 mail.koetsier.it</li>
+                    <li><strong>A:</strong> mail.koetsier.it → 192.168.1.201</li>
+                    <li><strong>SPF:</strong> "v=spf1 mx ~all"</li>
+                    <li><strong>DMARC:</strong> "v=DMARC1; p=quarantine"</li>
+                </ul>
+
+                <hr>
+
+                <h6 class="font-weight-bold">Domain Requirements:</h6>
+                <ul class="list-unstyled text-muted small">
+                    <li><i class="bi bi-check text-success me-1"></i> Valid domain format (e.g., example.com)</li>
+                    <li><i class="bi bi-check text-success me-1"></i> Must be publicly resolvable</li>
+                    <li><i class="bi bi-check text-success me-1"></i> Unique across the server</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

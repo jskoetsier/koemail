@@ -4,9 +4,9 @@ import os
 import sys
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     """Run administrative tasks."""
-    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'koemail_admin.settings')
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "koemail_admin.settings")
     try:
         from django.core.management import execute_from_command_line
     except ImportError as exc:

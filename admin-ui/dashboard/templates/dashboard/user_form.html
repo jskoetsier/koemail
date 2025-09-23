@@ -20,7 +20,7 @@
             <div class="card-body">
                 <form method="post">
                     {% csrf_token %}
-                    
+
                     <div class="mb-3">
                         <label for="name" class="form-label">Full Name <span class="text-danger">*</span></label>
                         <input type="text" class="form-control" id="name" name="name" value="{{ user.name|default:'' }}" required>
@@ -28,7 +28,7 @@
 
                     <div class="mb-3">
                         <label for="email" class="form-label">Email Address <span class="text-danger">*</span></label>
-                        <input type="email" class="form-control" id="email" name="email" value="{{ user.email|default:'' }}" 
+                        <input type="email" class="form-control" id="email" name="email" value="{{ user.email|default:'' }}"
                                {% if user %}readonly{% endif %} required>
                         {% if user %}
                             <div class="form-text">Email cannot be changed after user creation.</div>
@@ -53,10 +53,10 @@
 
                     <div class="mb-3">
                         <label for="password" class="form-label">
-                            Password 
+                            Password
                             {% if not user %}<span class="text-danger">*</span>{% endif %}
                         </label>
-                        <input type="password" class="form-control" id="password" name="password" 
+                        <input type="password" class="form-control" id="password" name="password"
                                {% if not user %}required{% endif %} minlength="8">
                         {% if user %}
                             <div class="form-text">Leave blank to keep current password.</div>
@@ -65,14 +65,14 @@
 
                     <div class="mb-3">
                         <label for="quota" class="form-label">Quota (GB) <span class="text-danger">*</span></label>
-                        <input type="number" class="form-control" id="quota" name="quota" 
+                        <input type="number" class="form-control" id="quota" name="quota"
                                value="{{ quota_gb|default:'1' }}" min="0.1" step="0.1" required>
                         <div class="form-text">Storage quota in gigabytes.</div>
                     </div>
 
                     <div class="mb-3">
                         <div class="form-check">
-                            <input type="checkbox" class="form-check-input" id="admin" name="admin" 
+                            <input type="checkbox" class="form-check-input" id="admin" name="admin"
                                    {% if user.admin %}checked{% endif %}>
                             <label class="form-check-label" for="admin">
                                 Administrator
@@ -83,7 +83,7 @@
 
                     <div class="mb-4">
                         <div class="form-check">
-                            <input type="checkbox" class="form-check-input" id="active" name="active" 
+                            <input type="checkbox" class="form-check-input" id="active" name="active"
                                    {% if user.active or not user %}checked{% endif %}>
                             <label class="form-check-label" for="active">
                                 Active
@@ -115,10 +115,10 @@
                     <dl class="row">
                         <dt class="col-sm-4">Created:</dt>
                         <dd class="col-sm-8">{{ user.created_at|date:"M d, Y H:i" }}</dd>
-                        
+
                         <dt class="col-sm-4">Last Updated:</dt>
                         <dd class="col-sm-8">{{ user.updated_at|date:"M d, Y H:i" }}</dd>
-                        
+
                         <dt class="col-sm-4">Last Login:</dt>
                         <dd class="col-sm-8">
                             {% if user.last_login %}
@@ -127,7 +127,7 @@
                                 <span class="text-muted">Never</span>
                             {% endif %}
                         </dd>
-                        
+
                         <dt class="col-sm-4">Domain:</dt>
                         <dd class="col-sm-8">{{ user.domain.domain }}</dd>
                     </dl>

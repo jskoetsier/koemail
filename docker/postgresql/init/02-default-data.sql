@@ -2,7 +2,7 @@
 -- This file inserts initial data and configuration
 
 -- Insert default domain (will be replaced by entrypoint script)
-INSERT INTO domains (domain, description, active) VALUES 
+INSERT INTO domains (domain, description, active) VALUES
 ('__DOMAIN__', 'Default domain for KoeMail server', TRUE);
 
 -- Insert default system settings
@@ -24,8 +24,8 @@ INSERT INTO system_settings (key, value, type, description) VALUES
 
 -- Create postmaster@__DOMAIN__ (required by RFC)
 -- Password: 'postmaster123' (hashed with bcrypt)
-INSERT INTO users (email, password, name, domain_id, admin, active) 
-SELECT 
+INSERT INTO users (email, password, name, domain_id, admin, active)
+SELECT
     'postmaster@__DOMAIN__',
     '$2b$10$rOkjKLWUeMPPrqnZgLI8..NZW8QjBBLvVyPgFvPPwmFh7PrFxJ32u',
     'Postmaster',
@@ -41,12 +41,12 @@ FROM users u WHERE u.email = 'postmaster@__DOMAIN__';
 
 -- Create some common aliases
 INSERT INTO aliases (source, destination, domain_id, active)
-SELECT 
+SELECT
     alias_source,
     'postmaster@__DOMAIN__',
     d.id,
     TRUE
-FROM domains d, (VALUES 
+FROM domains d, (VALUES
     ('abuse@__DOMAIN__'),
     ('admin@__DOMAIN__'),
     ('hostmaster@__DOMAIN__'),

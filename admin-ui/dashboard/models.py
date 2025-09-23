@@ -1,5 +1,6 @@
 from django.db import models
 
+
 class Domain(models.Model):
     domain = models.CharField(max_length=255, unique=True)
     description = models.TextField(blank=True)
@@ -8,10 +9,11 @@ class Domain(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        db_table = 'domains'
+        db_table = "domains"
 
     def __str__(self):
         return self.domain
+
 
 class User(models.Model):
     email = models.EmailField(unique=True)
@@ -26,10 +28,11 @@ class User(models.Model):
     last_login = models.DateTimeField(null=True, blank=True)
 
     class Meta:
-        db_table = 'users'
+        db_table = "users"
 
     def __str__(self):
         return self.email
+
 
 class Alias(models.Model):
     source = models.CharField(max_length=255)
@@ -39,10 +42,11 @@ class Alias(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        db_table = 'aliases'
+        db_table = "aliases"
 
     def __str__(self):
         return f"{self.source} -> {self.destination}"
+
 
 class QuotaUsage(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
@@ -51,17 +55,18 @@ class QuotaUsage(models.Model):
     last_updated = models.DateTimeField(auto_now=True)
 
     class Meta:
-        db_table = 'quota_usage'
+        db_table = "quota_usage"
+
 
 class SystemSetting(models.Model):
     key = models.CharField(max_length=100, primary_key=True)
     value = models.TextField()
-    type = models.CharField(max_length=20, default='string')
+    type = models.CharField(max_length=20, default="string")
     description = models.TextField(blank=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        db_table = 'system_settings'
+        db_table = "system_settings"
 
     def __str__(self):
         return self.key

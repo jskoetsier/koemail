@@ -1,0 +1,62 @@
+{% extends 'dashboard/base.html' %}
+
+{% block title %}Settings - KoeMail Admin{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">
+        <i class="bi bi-gear me-2"></i>Settings
+    </h1>
+</div>
+
+<p class="text-muted">Configure server settings and preferences</p>
+
+<!-- Settings by Category -->
+{% if grouped_settings %}
+    {% for category, settings in grouped_settings.items %}
+    <div class="card shadow mb-4">
+        <div class="card-header">
+            <h5 class="mb-0">{{ category }}</h5>
+        </div>
+        <div class="card-body">
+            {% for setting in settings %}
+            <div class="row align-items-center py-2 border-bottom">
+                <div class="col-md-4">
+                    <strong>{{ setting.key|title|replace:"_":" " }}</strong>
+                    {% if setting.description %}
+                        <br><small class="text-muted">{{ setting.description }}</small>
+                    {% endif %}
+                </div>
+                <div class="col-md-8">
+                    <form method="post" action="{% url 'setting_update' setting.key %}" class="d-flex align-items-center">
+                        {% csrf_token %}
+                        {% if setting.type == 'boolean' %}
+                            <select name="value" class="form-select me-2" style="width: auto;">
+                                <option value="true" {% if setting.value == 'true' %}selected{% endif %}>Yes</option>
+                                <option value="false" {% if setting.value == 'false' %}selected{% endif %}>No</option>
+                            </select>
+                        {% else %}
+                            <input type="{% if setting.type == 'integer' %}number{% else %}text{% endif %}" 
+                                   name="value" 
+                                   value="{{ setting.value }}" 
+                                   class="form-control me-2"
+                                   {% if setting.type == 'integer' %}min="0"{% endif %}>
+                        {% endif %}
+                        <button type="submit" class="btn btn-primary btn-sm">
+                            <i class="bi bi-check"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endfor %}
+{% else %}
+    <div class="text-center py-5">
+        <i class="bi bi-gear fs-1 text-muted"></i>
+        <h4 class="mt-3">No settings found</h4>
+        <p class="text-muted">System settings will appear here when available.</p>
+    </div>
+{% endif %}
+{% endblock %}
