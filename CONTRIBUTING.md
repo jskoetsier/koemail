@@ -42,7 +42,8 @@ By participating in this project, you agree to abide by our Code of Conduct:
 ### Prerequisites
 
 - Docker and Docker Compose
-- Node.js 16+ (for local development)
+- Python 3.11+ (for Django admin development)
+- Node.js 16+ (for API development)
 - Git
 
 ### Local Development
@@ -76,8 +77,8 @@ npm run dev  # Start with nodemon for auto-reload
 For **Admin UI development:**
 ```bash
 cd admin-ui
-npm install
-npm start    # Start React development server
+pip install -r requirements.txt
+python manage.py runserver  # Start Django development server
 ```
 
 ## Making Changes
@@ -172,11 +173,12 @@ Describe the tests that you ran to verify your changes
 - Use meaningful variable and function names
 - Add JSDoc comments for complex functions
 
-### React
-- Use functional components with hooks
-- Follow React best practices
-- Use meaningful component names
-- Add PropTypes for props validation
+### Python/Django
+- Follow PEP 8 style guidelines
+- Use Django best practices and patterns
+- Create meaningful model, view, and template names
+- Add proper docstrings for complex functions
+- Use Django ORM efficiently
 
 ### Docker
 - Use multi-stage builds where appropriate
@@ -206,9 +208,9 @@ Describe the tests that you ran to verify your changes
 cd api
 npm test
 
-# Admin UI tests
+# Admin UI tests (Django)
 cd admin-ui
-npm test
+python manage.py test
 
 # Integration tests
 docker compose -f docker-compose.test.yml up --abort-on-container-exit
