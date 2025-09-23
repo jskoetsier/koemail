@@ -74,7 +74,15 @@ koemail/
 
 ## Development
 
-See individual component READMEs for detailed setup instructions.
+See individual component READMEs for detailed setup instructions. For contributing guidelines, please read [CONTRIBUTING.md](CONTRIBUTING.md).
+
+## Versioning
+
+This project uses [Semantic Versioning](https://semver.org/). See [VERSION](VERSION) file for current version and [CHANGELOG.md](CHANGELOG.md) for release history.
+
+## Roadmap
+
+See our [ROADMAP.md](ROADMAP.md) for planned features and development timeline.
 
 ## License
 
