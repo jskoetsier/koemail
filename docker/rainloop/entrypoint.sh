@@ -13,8 +13,8 @@ envsubst < /var/www/html/data/_data_/_default_/configs/application.ini > /var/ww
 # Create domain configuration for KoeMail
 cat > /var/www/html/data/_data_/_default_/domains/${DOMAIN}.ini << EOF
 imap_host = "dovecot"
-imap_port = 993
-imap_secure = "SSL"
+imap_port = 143
+imap_secure = "TLS"
 imap_short_login = Off
 sieve_use = On
 sieve_allow_raw = Off
@@ -33,8 +33,8 @@ EOF
 # Create default domain (fallback)
 cat > /var/www/html/data/_data_/_default_/domains/default.ini << EOF
 imap_host = "dovecot"
-imap_port = 993
-imap_secure = "SSL"
+imap_port = 143
+imap_secure = "TLS"
 imap_short_login = Off
 sieve_use = On
 sieve_allow_raw = Off
@@ -55,11 +55,11 @@ chown -R www-data:www-data /var/www/html
 chmod -R 755 /var/www/html
 chmod -R 755 /var/www/html/data
 
-# Wait for Dovecot to be ready
+# Wait for Dovecot to be ready on port 143 (STARTTLS)
 echo "Waiting for Dovecot to be ready..."
 timeout=60
 counter=0
-while ! nc -z dovecot 993; do
+while ! nc -z dovecot 143; do
     sleep 2
     counter=$((counter + 2))
     if [ $counter -ge $timeout ]; then
