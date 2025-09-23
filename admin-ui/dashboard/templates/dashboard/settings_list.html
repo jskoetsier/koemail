@@ -1,4 +1,5 @@
 {% extends 'dashboard/base.html' %}
+{% load custom_filters %}
 
 {% block title %}Settings - KoeMail Admin{% endblock %}
 
@@ -22,7 +23,7 @@
             {% for setting in settings %}
             <div class="row align-items-center py-2 border-bottom">
                 <div class="col-md-4">
-                    <strong>{{ setting.key|title|replace:"_":" " }}</strong>
+                    <strong>{{ setting.key|format_setting_name }}</strong>
                     {% if setting.description %}
                         <br><small class="text-muted">{{ setting.description }}</small>
                     {% endif %}
