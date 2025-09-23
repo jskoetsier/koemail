@@ -1,5 +1,12 @@
 FROM ubuntu:22.04
 
+# Set environment to non-interactive to prevent prompts
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Configure postfix installation (must be done before installing)
+RUN echo "postfix postfix/main_mailer_type select Internet Site" | debconf-set-selections
+RUN echo "postfix postfix/mailname string mail.example.com" | debconf-set-selections
+
 # Install packages
 RUN apt-get update && apt-get install -y \
     postfix \
@@ -9,10 +16,6 @@ RUN apt-get update && apt-get install -y \
     postgresql-client \
     gettext-base \
     && rm -rf /var/lib/apt/lists/*
-
-# Configure postfix to not start automatically
-RUN echo "postfix postfix/main_mailer_type string 'Internet Site'" | debconf-set-selections
-RUN echo "postfix postfix/mailname string mail.example.com" | debconf-set-selections
 
 # Create necessary directories
 RUN mkdir -p /var/log/supervisor
