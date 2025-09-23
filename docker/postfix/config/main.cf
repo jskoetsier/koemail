@@ -22,10 +22,10 @@ virtual_minimum_uid = 1000
 virtual_uid_maps = static:1000
 virtual_gid_maps = static:1000
 
-# SMTP Authentication via TCP (for container setup)
+# SMTP Authentication via TCP (using IP address)
 smtpd_sasl_auth_enable = yes
 smtpd_sasl_type = dovecot
-smtpd_sasl_path = inet:dovecot:12345
+smtpd_sasl_path = inet:172.18.0.8:12345
 smtpd_sasl_security_options = noanonymous
 smtpd_sasl_local_domain = ${DOMAIN}
 broken_sasl_auth_clients = yes
