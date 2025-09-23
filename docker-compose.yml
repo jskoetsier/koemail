@@ -38,7 +38,6 @@ services:
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-changeme123}
     volumes:
       - mail_data:/var/mail
-      - postfix_spool:/var/spool/postfix
       - ./docker/postfix/config:/etc/postfix/conf.d
       - ./certs:/etc/ssl/certs/mail
     ports:
@@ -64,7 +63,6 @@ services:
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-changeme123}
     volumes:
       - mail_data:/var/mail
-      - postfix_spool:/var/spool/postfix
       - ./certs:/etc/ssl/certs/mail
     ports:
       - "110:110"
@@ -170,7 +168,6 @@ volumes:
   postgresql_data:
   redis_data:
   mail_data:
-  postfix_spool:
   rspamd_data:
   clamav_data:
   rainloop_data:
