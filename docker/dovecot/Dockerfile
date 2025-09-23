@@ -21,7 +21,9 @@ RUN mkdir -p /var/mail
 RUN mkdir -p /etc/dovecot/conf.d
 
 # Copy configuration files
-COPY config/ /etc/dovecot/conf.d/
+COPY config/dovecot.conf /etc/dovecot/dovecot.conf
+COPY config/auth-sql.conf.ext /etc/dovecot/conf.d/auth-sql.conf.ext
+COPY config/dovecot-sql.conf.ext /etc/dovecot/conf.d/dovecot-sql.conf.ext
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 COPY entrypoint.sh /entrypoint.sh
 

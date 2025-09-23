@@ -63,7 +63,6 @@ services:
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-changeme123}
     volumes:
       - mail_data:/var/mail
-      - ./docker/dovecot/config:/etc/dovecot/conf.d
       - ./certs:/etc/ssl/certs/mail
     ports:
       - "110:110"
