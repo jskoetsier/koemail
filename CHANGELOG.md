@@ -17,14 +17,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - ClamAV antivirus integration for malware protection
   - RainLoop modern webmail client for end-user email access
 
-- **Management API & Interfaces**
+- **Management API & Backend**
   - Node.js REST API with Express.js framework
   - JWT-based authentication and authorization system
-  - React-based admin interface with modern UI components
   - User management endpoints (create, read, update, delete)
-  - Domain and alias management functionality
-  - Basic quota tracking and management
+  - Domain and alias management endpoints
+  - Basic quota tracking and management endpoints
   - System health monitoring endpoint
+  - React admin interface foundation (basic components - full functionality in development)
 
 - **Security Features**
   - SSL/TLS support with automatic self-signed certificate generation
