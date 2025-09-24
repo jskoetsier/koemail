@@ -22,18 +22,18 @@ virtual_minimum_uid = 1000
 virtual_uid_maps = static:1000
 virtual_gid_maps = static:1000
 
-# SMTP Authentication via TCP (using container hostname)
-smtpd_sasl_auth_enable = yes
-smtpd_sasl_type = dovecot
-smtpd_sasl_path = inet:dovecot:12345
-smtpd_sasl_security_options = noanonymous
-smtpd_sasl_local_domain = ${DOMAIN}
-broken_sasl_auth_clients = yes
+# SMTP Authentication via TCP (using container hostname) - DISABLED FOR TESTING
+#smtpd_sasl_auth_enable = yes
+#smtpd_sasl_type = dovecot
+#smtpd_sasl_path = inet:dovecot:12345
+#smtpd_sasl_security_options = noanonymous
+#smtpd_sasl_local_domain = ${DOMAIN}
+#broken_sasl_auth_clients = yes
 
-# Client restrictions for submission ports
-mua_client_restrictions = permit_sasl_authenticated,reject
-mua_helo_restrictions = permit_sasl_authenticated,reject_non_fqdn_helo_hostname,reject_invalid_helo_hostname,reject
-mua_sender_restrictions = permit_sasl_authenticated,reject_non_fqdn_sender,reject_sender_login_mismatch,reject
+# Client restrictions for submission ports - RELAXED FOR TESTING
+mua_client_restrictions = permit_mynetworks,permit
+mua_helo_restrictions = permit_mynetworks,permit
+mua_sender_restrictions = permit_mynetworks,permit
 
 # TLS Configuration
 smtpd_use_tls = yes
