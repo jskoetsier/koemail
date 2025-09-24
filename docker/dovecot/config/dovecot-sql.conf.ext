@@ -4,8 +4,8 @@ driver = pgsql
 # Connection string
 connect = host=${POSTGRES_HOST} dbname=${POSTGRES_DB} user=${POSTGRES_USER} password=${POSTGRES_PASSWORD}
 
-# Default password scheme (temporarily allow plain for testing)
-default_pass_scheme = PLAIN
+# Default password scheme - bcrypt for security
+default_pass_scheme = BLF-CRYPT
 
 # Password query
 password_query = SELECT email as user, password FROM users WHERE email='%u' AND active=true
