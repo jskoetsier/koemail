@@ -67,7 +67,7 @@ cd $REMOTE_PATH
 git pull
 
 echo "Stopping existing containers..."
-docker-compose down --remove-orphans || true
+docker compose down --remove-orphans || true
 
 echo "Copying SSL certificates and .env file..."
 EOF
@@ -83,17 +83,17 @@ set -e
 cd $REMOTE_PATH
 
 echo "Building and starting containers..."
-docker-compose build --no-cache
-docker-compose up -d
+docker compose build --no-cache
+docker compose up -d
 
 echo "Waiting for services to start..."
 sleep 30
 
 echo "Checking service status..."
-docker-compose ps
+docker compose ps
 
 echo "Checking logs for any issues..."
-docker-compose logs --tail=20
+docker compose logs --tail=20
 
 echo "Deployment completed!"
 echo ""
