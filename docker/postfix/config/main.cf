@@ -30,6 +30,11 @@ smtpd_sasl_security_options = noanonymous
 smtpd_sasl_local_domain = ${DOMAIN}
 broken_sasl_auth_clients = yes
 
+# Client restrictions for submission ports
+mua_client_restrictions = permit_sasl_authenticated,reject
+mua_helo_restrictions = permit_sasl_authenticated,reject_non_fqdn_helo_hostname,reject_invalid_helo_hostname,reject
+mua_sender_restrictions = permit_sasl_authenticated,reject_non_fqdn_sender,reject_sender_login_mismatch,reject
+
 # TLS Configuration
 smtpd_use_tls = yes
 smtpd_tls_security_level = may
