@@ -11,7 +11,7 @@ default_pass_scheme = BLF-CRYPT
 password_query = SELECT email as user, password FROM users WHERE email='%u' AND active=true
 
 # User query for IMAP/POP3
-user_query = SELECT '/var/mail/%d/%n' as home, '/var/mail/%d/%n' as mail, 1000 AS uid, 1000 AS gid, concat('dirsize:storage=', quota) AS quota_rule FROM users WHERE email='%u' AND active=true
+user_query = SELECT '/var/mail/%d/%n' as home, 1000 AS uid, 1000 AS gid, concat('dirsize:storage=', quota) AS quota_rule FROM users WHERE email='%u' AND active=true
 
 # Iterate users query (for doveadm)
 iterate_query = SELECT email as user FROM users WHERE active=true
