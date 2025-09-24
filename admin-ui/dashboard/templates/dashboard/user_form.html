@@ -249,6 +249,51 @@ document.addEventListener('DOMContentLoaded', function() {
             e.target.focus();
         }
     }, true);
+      
+    // Add form submission monitoring
+    const form = document.getElementById('userForm');
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            console.log('🚀 Form submission intercepted!');
+              
+            // Get all form data
+            const formData = new FormData(form);
+              
+            console.log('Form data being submitted:');
+            for (let [key, value] of formData.entries()) {
+                console.log(`  ${key}: "${value}"`);
+            }
+              
+            // Specifically check critical fields
+            const email = formData.get('email');
+            const domainId = formData.get('domain_id');
+            const name = formData.get('name');
+              
+            console.log('Critical field values:');
+            console.log(`  Email: "${email}"`);
+            console.log(`  Domain ID: "${domainId}"`);
+            console.log(`  Name: "${name}"`);
+              
+            // Check if domain_id is empty or null
+            if (!domainId || domainId === '') {
+                console.error('❌ PROBLEM: domain_id is empty!');
+                console.log('Domain dropdown current state:', {
+                    selectedIndex: domainField ? domainField.selectedIndex : 'Field not found',
+                    value: domainField ? domainField.value : 'Field not found',
+                    disabled: domainField ? domainField.disabled : 'Field not found'
+                });
+                  
+                // Try to force select a domain if none selected
+                if (domainField && domainField.options.length > 1) {
+                    console.log('Attempting to auto-select first domain...');
+                    domainField.selectedIndex = 1; // Select first real option (skip "Select a domain")
+                    console.log('Auto-selected domain:', domainField.value);
+                }
+            } else {
+                console.log('✅ Domain ID looks good:', domainId);
+            }
+        });
+    }
 });
 
 // Add global error handler
@@ -280,7 +325,7 @@ window.addEventListener('error', function(e) {
     <div class="col-md-6">
         <div class="card shadow">
             <div class="card-body">
-                <form method="post">
+                <form method="post" id="userForm">
                     {% csrf_token %}
 
                     <div class="mb-3">

@@ -84,6 +84,7 @@ def dashboard(request):
 
 @require_admin
 def users_list(request):
+    # Use left join to include users with NULL domain_id
     users = (
         User.objects.select_related("domain")
         .prefetch_related("quotausage")
