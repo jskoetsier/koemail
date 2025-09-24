@@ -45,6 +45,7 @@ RUN mkdir -p /var/www/html/data \
 COPY apache.conf /etc/apache2/sites-available/000-default.conf
 COPY entrypoint.sh /entrypoint.sh
 COPY application.ini /var/www/html/data/_data_/_default_/configs/application.ini
+COPY domains.ini /var/www/html/data/_data_/_default_/domains/
 
 # Set permissions
 RUN chmod +x /entrypoint.sh

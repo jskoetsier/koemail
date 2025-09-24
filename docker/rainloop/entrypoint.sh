@@ -10,11 +10,11 @@ mkdir -p /var/www/html/data/_data_/_default_/domains
 # Replace environment variables in configuration files
 envsubst < /var/www/html/data/_data_/_default_/configs/application.ini > /var/www/html/data/_data_/_default_/configs/application.ini.tmp && mv /var/www/html/data/_data_/_default_/configs/application.ini.tmp /var/www/html/data/_data_/_default_/configs/application.ini
 
-# Create domain configuration for KoeMail (SSL disabled for now)
+# Create domain configuration for KoeMail (SSL enabled)
 cat > /var/www/html/data/_data_/_default_/domains/${DOMAIN}.ini << EOF
 imap_host = "dovecot"
-imap_port = 143
-imap_secure = "None"
+imap_port = 993
+imap_secure = "SSL"
 imap_short_login = Off
 sieve_use = On
 sieve_allow_raw = Off
@@ -22,8 +22,8 @@ sieve_host = "dovecot"
 sieve_port = 4190
 sieve_secure = "None"
 smtp_host = "postfix"
-smtp_port = 25
-smtp_secure = "None"
+smtp_port = 587
+smtp_secure = "TLS"
 smtp_short_login = Off
 smtp_auth = On
 smtp_php_mail = Off
@@ -33,8 +33,8 @@ EOF
 # Create default domain (fallback)
 cat > /var/www/html/data/_data_/_default_/domains/default.ini << EOF
 imap_host = "dovecot"
-imap_port = 143
-imap_secure = "None"
+imap_port = 993
+imap_secure = "SSL"
 imap_short_login = Off
 sieve_use = On
 sieve_allow_raw = Off
@@ -42,8 +42,8 @@ sieve_host = "dovecot"
 sieve_port = 4190
 sieve_secure = "None"
 smtp_host = "postfix"
-smtp_port = 25
-smtp_secure = "None"
+smtp_port = 587
+smtp_secure = "TLS"
 smtp_short_login = Off
 smtp_auth = On
 smtp_php_mail = Off
