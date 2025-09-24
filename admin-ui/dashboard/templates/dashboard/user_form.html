@@ -2,6 +2,145 @@
 
 {% block title %}{{ action }} User - KoeMail Admin{% endblock %}
 
+{% block extra_css %}
+<style>
+/* Debug styles to ensure form fields are visible and clickable */
+.form-control, .form-select {
+    position: relative !important;
+    z-index: 1 !important;
+    pointer-events: auto !important;
+    opacity: 1 !important;
+    background-color: #fff !important;
+    border: 1px solid #ced4da !important;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: #86b7fe !important;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25) !important;
+}
+
+/* Ensure no overlays are blocking the form */
+.card-body {
+    position: relative !important;
+    z-index: 2 !important;
+}
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Debug script to diagnose form issues
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('KoeMail User Form Debug - Page loaded');
+    
+    // Check all form elements
+    const emailField = document.getElementById('email');
+    const domainField = document.getElementById('domain_id');
+    const nameField = document.getElementById('name');
+    
+    console.log('Form field analysis:');
+    console.log('- Email field:', emailField ? 'Found' : 'NOT FOUND');
+    console.log('- Domain field:', domainField ? 'Found' : 'NOT FOUND');
+    console.log('- Name field:', nameField ? 'Found' : 'NOT FOUND');
+    
+    if (emailField) {
+        console.log('Email field properties:', {
+            readonly: emailField.readOnly,
+            disabled: emailField.disabled,
+            value: emailField.value,
+            type: emailField.type,
+            tabIndex: emailField.tabIndex
+        });
+        
+        // Add focus event listener
+        emailField.addEventListener('focus', function() {
+            console.log('Email field focused successfully');
+        });
+        
+        emailField.addEventListener('click', function() {
+            console.log('Email field clicked successfully');
+        });
+    }
+    
+    if (domainField) {
+        console.log('Domain field properties:', {
+            disabled: domainField.disabled,
+            selectedIndex: domainField.selectedIndex,
+            options: domainField.options.length,
+            tabIndex: domainField.tabIndex
+        });
+        
+        // List all domain options
+        console.log('Domain options:');
+        for (let i = 0; i < domainField.options.length; i++) {
+            console.log(`  ${i}: ${domainField.options[i].value} - ${domainField.options[i].text}`);
+        }
+        
+        domainField.addEventListener('focus', function() {
+            console.log('Domain field focused successfully');
+        });
+        
+        domainField.addEventListener('click', function() {
+            console.log('Domain field clicked successfully');
+        });
+    }
+    
+    // Check for any overlay elements that might be blocking
+    const cardBody = document.querySelector('.card-body');
+    if (cardBody) {
+        const computedStyle = window.getComputedStyle(cardBody);
+        console.log('Card body z-index:', computedStyle.zIndex);
+        console.log('Card body position:', computedStyle.position);
+    }
+    
+    // Check Bootstrap loading
+    if (typeof bootstrap !== 'undefined') {
+        console.log('✅ Bootstrap JS loaded successfully');
+    } else {
+        console.log('❌ Bootstrap JS not loaded');
+    }
+    
+    // Test if we can programmatically interact with fields
+    setTimeout(function() {
+        console.log('Testing programmatic interaction...');
+        
+        if (emailField && !emailField.readOnly && !emailField.disabled) {
+            console.log('Attempting to focus email field...');
+            emailField.focus();
+            
+            if (document.activeElement === emailField) {
+                console.log('✅ Email field focus successful');
+            } else {
+                console.log('❌ Email field focus failed');
+            }
+        }
+        
+        if (domainField && !domainField.disabled) {
+            console.log('Attempting to focus domain field...');
+            domainField.focus();
+            
+            if (document.activeElement === domainField) {
+                console.log('✅ Domain field focus successful');
+            } else {
+                console.log('❌ Domain field focus failed');
+            }
+        }
+    }, 1000);
+});
+
+// Add global error handler
+window.addEventListener('error', function(e) {
+    console.error('JavaScript error detected:', e.error);
+    console.error('Error details:', {
+        message: e.message,
+        filename: e.filename,
+        lineno: e.lineno,
+        colno: e.colno
+    });
+});
+</script>
+{% endblock %}
+
 {% block content %}
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
     <h1 class="h2">
