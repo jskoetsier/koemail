@@ -4,25 +4,78 @@
 
 {% block extra_css %}
 <style>
-/* Debug styles to ensure form fields are visible and clickable */
+/* Aggressive fix to force form fields to be interactive */
 .form-control, .form-select {
     position: relative !important;
-    z-index: 1 !important;
+    z-index: 9999 !important;
     pointer-events: auto !important;
     opacity: 1 !important;
-    background-color: #fff !important;
-    border: 1px solid #ced4da !important;
+    background-color: #ffffff !important;
+    border: 2px solid #007bff !important;
+    display: block !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: 38px !important;
+    padding: 8px 12px !important;
+    font-size: 14px !important;
+    line-height: 1.5 !important;
+    color: #212529 !important;
+    cursor: text !important;
+    user-select: text !important;
+    -webkit-user-select: text !important;
+}
+
+.form-select {
+    cursor: pointer !important;
 }
 
 .form-control:focus, .form-select:focus {
-    border-color: #86b7fe !important;
-    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25) !important;
+    border-color: #0056b3 !important;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25) !important;
+    outline: none !important;
 }
 
-/* Ensure no overlays are blocking the form */
+.form-control:hover, .form-select:hover {
+    border-color: #0056b3 !important;
+}
+
+/* Remove any potential blocking elements */
 .card-body {
     position: relative !important;
-    z-index: 2 !important;
+    z-index: 1 !important;
+}
+
+.card-body::before,
+.card-body::after,
+.form-control::before,
+.form-control::after,
+.form-select::before,
+.form-select::after {
+    display: none !important;
+}
+
+/* Force remove any potential overlay */
+* {
+    pointer-events: auto !important;
+}
+
+/* Specifically target the form container */
+form {
+    position: relative !important;
+    z-index: 10000 !important;
+}
+
+/* Remove Bootstrap's disabled styling if accidentally applied */
+.form-control:disabled,
+.form-select:disabled {
+    background-color: #ffffff !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    cursor: text !important;
+}
+
+.form-select:disabled {
+    cursor: pointer !important;
 }
 </style>
 {% endblock %}
@@ -100,32 +153,102 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log('❌ Bootstrap JS not loaded');
     }
     
-    // Test if we can programmatically interact with fields
+    // Aggressive field fixing - force fields to be interactive
     setTimeout(function() {
         console.log('Testing programmatic interaction...');
-        
-        if (emailField && !emailField.readOnly && !emailField.disabled) {
+          
+        // Force all form controls to be interactive
+        const allControls = document.querySelectorAll('.form-control, .form-select');
+        allControls.forEach(function(control) {
+            // Remove any disabled or readonly attributes
+            control.removeAttribute('disabled');
+            if (control.id !== 'email' || !control.closest('form').querySelector('input[name="user"]')) {
+                // Only remove readonly from email if this is a create form (not edit)
+                control.removeAttribute('readonly');
+            }
+              
+            // Force CSS properties
+            control.style.pointerEvents = 'auto';
+            control.style.opacity = '1';
+            control.style.cursor = control.tagName.toLowerCase() === 'select' ? 'pointer' : 'text';
+            control.style.backgroundColor = '#ffffff';
+            control.style.border = '2px solid #007bff';
+            control.style.zIndex = '9999';
+            control.style.position = 'relative';
+              
+            console.log('Fixed field:', control.id || control.name, {
+                disabled: control.disabled,
+                readonly: control.readOnly,
+                style: control.style.pointerEvents
+            });
+        });
+          
+        // Test interaction after fixes
+        if (emailField) {
             console.log('Attempting to focus email field...');
             emailField.focus();
-            
+              
             if (document.activeElement === emailField) {
                 console.log('✅ Email field focus successful');
             } else {
                 console.log('❌ Email field focus failed');
+                // Force focus
+                emailField.click();
+                emailField.focus();
             }
         }
-        
-        if (domainField && !domainField.disabled) {
+          
+        if (domainField) {
             console.log('Attempting to focus domain field...');
             domainField.focus();
-            
+              
             if (document.activeElement === domainField) {
                 console.log('✅ Domain field focus successful');
             } else {
                 console.log('❌ Domain field focus failed');
+                // Force focus
+                domainField.click();
+                domainField.focus();
             }
         }
+          
+        // Add manual click handlers to override any blocking
+        if (emailField) {
+            emailField.addEventListener('mousedown', function(e) {
+                console.log('Email field mousedown event');
+                e.stopPropagation();
+                this.focus();
+            }, true);
+              
+            emailField.addEventListener('mouseup', function(e) {
+                console.log('Email field mouseup event');
+                e.stopPropagation();
+                this.focus();
+            }, true);
+        }
+          
+        if (domainField) {
+            domainField.addEventListener('mousedown', function(e) {
+                console.log('Domain field mousedown event');
+                e.stopPropagation();
+                this.focus();
+            }, true);
+              
+            domainField.addEventListener('mouseup', function(e) {
+                console.log('Domain field mouseup event');
+                e.stopPropagation();
+                this.focus();
+            }, true);
+        }
     }, 1000);
+      
+    // Additional fix - override any event blocking
+    document.addEventListener('click', function(e) {
+        if (e.target.classList.contains('form-control') || e.target.classList.contains('form-select')) {
+            console.log('Form field clicked via document listener:', e.target.id);
+            e.target.focus();
+        }
+    }, true);
 });
 
 // Add global error handler
