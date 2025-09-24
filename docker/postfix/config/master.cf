@@ -9,31 +9,31 @@
 # SMTP daemon - Port 25 (standard SMTP)
 smtp      inet  n       -       y       -       -       smtpd
 
-# Submission daemon - Port 587 (TEMPORARILY NO AUTH FOR TESTING)
+# Submission daemon - Port 587 (NO AUTH FOR TESTING)
 submission inet n       -       y       -       -       smtpd
   -o syslog_name=postfix/submission
   -o smtpd_tls_security_level=may
   -o smtpd_sasl_auth_enable=no
   -o smtpd_tls_auth_only=no
   -o smtpd_reject_unlisted_recipient=no
-  -o smtpd_client_restrictions=$mua_client_restrictions
-  -o smtpd_helo_restrictions=$mua_helo_restrictions
-  -o smtpd_sender_restrictions=$mua_sender_restrictions
-  -o smtpd_recipient_restrictions=
-  -o smtpd_relay_restrictions=permit
+  -o smtpd_client_restrictions=permit
+  -o smtpd_helo_restrictions=permit
+  -o smtpd_sender_restrictions=permit
+  -o smtpd_recipient_restrictions=permit
+  -o smtpd_relay_restrictions=permit,reject
   -o milter_macro_daemon_name=ORIGINATING
 
-# SMTPS daemon - Port 465 (TEMPORARILY NO AUTH FOR TESTING)
+# SMTPS daemon - Port 465 (NO AUTH FOR TESTING)
 smtps     inet  n       -       y       -       -       smtpd
   -o syslog_name=postfix/smtps
   -o smtpd_tls_wrappermode=yes
   -o smtpd_sasl_auth_enable=no
   -o smtpd_reject_unlisted_recipient=no
-  -o smtpd_client_restrictions=$mua_client_restrictions
-  -o smtpd_helo_restrictions=$mua_helo_restrictions
-  -o smtpd_sender_restrictions=$mua_sender_restrictions
-  -o smtpd_recipient_restrictions=
-  -o smtpd_relay_restrictions=permit
+  -o smtpd_client_restrictions=permit
+  -o smtpd_helo_restrictions=permit
+  -o smtpd_sender_restrictions=permit
+  -o smtpd_recipient_restrictions=permit
+  -o smtpd_relay_restrictions=permit,reject
   -o milter_macro_daemon_name=ORIGINATING
 
 # Standard Postfix services
