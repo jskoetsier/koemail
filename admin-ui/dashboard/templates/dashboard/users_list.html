@@ -48,9 +48,16 @@
                         <tr>
                             <td>
                                 <div>
-                                    <strong>{{ user.name }}</strong>
+                                    <strong>{{ user.name|default:"No Name" }}</strong>
                                     <br>
-                                    <small class="text-muted">{{ user.email }}</small>
+                                    <small class="text-muted">{{ user.email|default:"No Email" }}</small>
+                                    {% if user.domain %}
+                                        <br>
+                                        <small class="badge bg-info">{{ user.domain.domain }}</small>
+                                    {% else %}
+                                        <br>
+                                        <small class="badge bg-warning">No Domain</small>
+                                    {% endif %}
                                 </div>
                             </td>
                             <td>

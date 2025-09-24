@@ -122,6 +122,26 @@ def user_create(request):
             admin = request.POST.get("admin") == "on"
             active = request.POST.get("active") == "on"
 
+            # Validate required fields
+            if not email or not password or not name:
+                messages.error(request, "Email, password, and name are required.")
+                raise ValueError("Missing required fields")
+
+            # Handle domain_id - convert empty string to None, validate it exists
+            if not domain_id or domain_id == "":
+                messages.error(request, "Please select a domain.")
+                raise ValueError("Domain is required")
+            
+            # Convert domain_id to integer and validate it exists
+            try:
+                domain_id = int(domain_id)
+                if not Domain.objects.filter(id=domain_id, active=True).exists():
+                    messages.error(request, "Selected domain is invalid.")
+                    raise ValueError("Invalid domain")
+            except (ValueError, TypeError):
+                messages.error(request, "Please select a valid domain.")
+                raise ValueError("Invalid domain ID")
+
             # Hash password
             hashed_password = bcrypt.hashpw(
                 password.encode("utf-8"), bcrypt.gensalt()
